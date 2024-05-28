@@ -13,12 +13,17 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Run setup script
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Run setup script on AWS machine
       run: |
-        chmod +x setup_vuln.sh
-        ./setup_vuln.sh
+        scp -o StrictHostKeyChecking=no setup_vuln.sh gs@3.26.219.49:/tmp/setup_vuln.sh
+        ssh -o StrictHostKeyChecking=no gs@3.26.219.49 'chmod +x /tmp/setup_vuln.sh && sudo /tmp/setup_vuln.sh'
 
     - name: Copy additional scripts
       run: |
-        cp cleanup_vulnerable_machine.sh /opt/vulnerable/
-        cp setup_vulnerable_machine.sh /opt/vulnerable/
+        scp -o StrictHostKeyChecking=no cleanup_vulnerable_machine.sh gs@3.26.219.49:/opt/vulnerable/
+        scp -o StrictHostKeyChecking=no another_script.sh gs@3.26.219.49:/opt/vulnerable/
