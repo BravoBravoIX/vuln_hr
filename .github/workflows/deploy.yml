@@ -10,20 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4  # Updated to v4 for Node.js 20 support
+      - name: Checkout repository
+        uses: actions/checkout@v4 
 
-    - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.7.0  # Updated to the latest version for Node.js 20 support
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Install SSHpass
+        run: sudo apt-get install -y sshpass  
 
-    - name: Run setup script on AWS machine
-      run: |
-        scp -o StrictHostKeyChecking=no setup_vuln.sh ubuntu@3.26.219.49:/tmp/setup_vuln.sh
-        ssh -o StrictHostKeyChecking=no ubuntu@3.26.219.49 'chmod +x /tmp/setup_vuln.sh && sudo /tmp/setup_vuln.sh'
+      - name: Run setup script on AWS machine
+        run: |
+          sshpass -e scp -o StrictHostKeyChecking=no setup_vuln.sh ubuntu@3.26.219.49:/tmp/setup_vuln.sh
+          sshpass -e ssh -o StrictHostKeyChecking=no ubuntu@3.26.219.49 'chmod +x /tmp/setup_vuln.sh && sudo /tmp/setup_vuln.sh'
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
 
-    - name: Copy additional scripts
-      run: |
-        scp -o StrictHostKeyChecking=no cleanup_vulnerable_machine.sh ubuntu@3.26.219.49:/opt/vulnerable/
-        scp -o StrictHostKeyChecking=no another_script.sh ubuntu@3.26.219.49:/opt/vulnerable/
+      - name: Copy additional scripts
+        run: |
+          sshpass -e scp -o StrictHostKeyChecking=no cleanup_vulnerable_machine.sh ubuntu@3.26.219.49:/opt/vulnerable/
+          sshpass -e scp -o StrictHostKeyChecking=no another_script.sh ubuntu@3.26.219.49:/opt/vulnerable/
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
