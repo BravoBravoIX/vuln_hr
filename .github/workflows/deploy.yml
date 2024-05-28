@@ -20,10 +20,10 @@ jobs:
 
     - name: Run setup script on AWS machine
       run: |
-        scp -o StrictHostKeyChecking=no setup_vuln.sh gs@3.26.219.49:/tmp/setup_vuln.sh
-        ssh -o StrictHostKeyChecking=no gs@3.26.219.49 'chmod +x /tmp/setup_vuln.sh && sudo /tmp/setup_vuln.sh'
+        scp -o StrictHostKeyChecking=no setup_vuln.sh ubuntu@3.26.219.49:/tmp/setup_vuln.sh
+        ssh -o StrictHostKeyChecking=no ubuntu@3.26.219.49 'chmod +x /tmp/setup_vuln.sh && sudo /tmp/setup_vuln.sh'
 
     - name: Copy additional scripts
       run: |
-        scp -o StrictHostKeyChecking=no cleanup_vulnerable_machine.sh gs@3.26.219.49:/opt/vulnerable/
-        scp -o StrictHostKeyChecking=no another_script.sh gs@3.26.219.49:/opt/vulnerable/
+        scp -o StrictHostKeyChecking=no cleanup_vulnerable_machine.sh ubuntu@3.26.219.49:/opt/vulnerable/
+        scp -o StrictHostKeyChecking=no another_script.sh ubuntu@3.26.219.49:/opt/vulnerable/
