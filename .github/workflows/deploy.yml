@@ -18,14 +18,14 @@ jobs:
 
       - name: Run setup script on AWS machine
         run: |
-          sshpass -e scp -o StrictHostKeyChecking=no setup_vuln.sh ubuntu@3.26.219.49:/tmp/setup_vuln.sh
-          sshpass -e ssh -o StrictHostKeyChecking=no ubuntu@3.26.219.49 'chmod +x /tmp/setup_vuln.sh && sudo /tmp/setup_vuln.sh'
+          sshpass -e scp -o StrictHostKeyChecking=no setup_vuln.sh ubuntu@3.26.219.49:/home/ubuntu/setup_vuln.sh
+          sshpass -e ssh -o StrictHostKeyChecking=no ubuntu@3.26.219.49 'chmod +x /home/ubuntu/setup_vuln.sh && sudo /tmp/setup_vuln.sh'
         env:
           SSHPASS: ${{ secrets.SSH_PASSWORD }}
 
       - name: Copy additional scripts
         run: |
-          sshpass -e scp -o StrictHostKeyChecking=no cleanup_vulnerable_machine.sh ubuntu@3.26.219.49:/opt/vulnerable/
-          sshpass -e scp -o StrictHostKeyChecking=no another_script.sh ubuntu@3.26.219.49:/opt/vulnerable/
+          sshpass -e scp -o StrictHostKeyChecking=no cleanup_vulnerable_machine.sh ubuntu@3.26.219.49:/home/ubuntu/old/
+          sshpass -e scp -o StrictHostKeyChecking=no another_script.sh ubuntu@3.26.219.49:/home/ubuntu/old/
         env:
           SSHPASS: ${{ secrets.SSH_PASSWORD }}
